@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+    <project path="device/rockchip/rk29board" name="Morka-59/cm_device_rockchip_rk29board" remote="github" revision="patch-1"/>
+</manifest>
