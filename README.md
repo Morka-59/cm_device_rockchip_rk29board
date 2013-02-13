@@ -9,4 +9,6 @@ replace http://crewrktablets.arctablet.com/?wpfb_dl=179 with url your model tabs
     mv kernel.img ~/android/system/device/rockchip/rk29board/kernel
 
 Update android 4.2.2
+=================================
+
 ![android_4.2.2 output](http://img15.hostingpics.net/pics/586024Screenshotfrom20130213132553.png)
