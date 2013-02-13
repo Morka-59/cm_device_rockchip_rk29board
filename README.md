@@ -8,7 +8,7 @@ replace http://crewrktablets.arctablet.com/?wpfb_dl=179 with url your model tabs
     7z e kernel.7z
     mv kernel.img ~/android/system/device/rockchip/rk29board/kernel
 
-Update android 4.2.2
+Fix Compile Now
 =================================
 
-![android_4.2.2 output](http://img15.hostingpics.net/pics/586024Screenshotfrom20130213132553.png)
+![android_4.2.1 output](http://img11.hostingpics.net/pics/377073Screenshotfrom20130213205924.png)
