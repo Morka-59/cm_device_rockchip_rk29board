@@ -16,15 +16,23 @@
 #$(call inherit-product, build/target/product/mini.mk)
 #$(call inherit-product, build/target/product/full.mk)
 
-PRODUCT_NAME := full_rk29board
-PRODUCT_DEVICE := rk29board
-PRODUCT_BRAND := Android
-PRODUCT_MODEL := rk29board
-PRODUCT_MANUFACTURER := Rockchip
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
+
+# Discard inherited values and use our own instead.
+PRODUCT_NAME := cm_rk2918
+PRODUCT_BRAND := rockhip
+PRODUCT_DEVICE := rk2918
+PRODUCT_MODEL := PASCAL2
+PRODUCT_MANUFACTURER := rockchip
+
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+
+# The gps config appropriate for this device
+$(call inherit-product, device/common/gps/gps_us_supl.mk)
 
 # default is nosdcard, S/W button enabled in resource
 DEVICE_PACKAGE_OVERLAYS := device/rockchip/rk29board/overlay
-#PRODUCT_CHARACTERISTICS := nosdcard
+PRODUCT_AAPT_CONFIG := xlarge mdpi normal xhdpi hdpi
 
 # Copy prebuilt bins
 PRODUCT_COPY_FILES += \
@@ -90,6 +98,21 @@ PRODUCT_COPY_FILES += \
         frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
         frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml
 
+# Charger
+PRODUCT_PACKAGES += \
+    charger \
+    charger_res_images
+
+# Prebuilt kernel
+ifeq ($(TARGET_PREBUILT_KERNEL),)
+LOCAL_KERNEL := device/rockchip/rk29board/kernel
+else
+LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
+endif
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_KERNEL):kernel
+
 # Build.prop 
 PRODUCT_PROPERTY_OVERRIDES += \
         persist.sys.timezone=Europe/Berlin \
@@ -104,13 +127,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
         qemu.hw.mainkeys=0 \
         wifi.interface=wlan0 \
         ro.crewrktablets.mod = TabletUI
-
-# enable ADB
-#PRODUCT_PROPERTY_OVERRIDES := \
-#        service.adb.root=1 \
-#        ro.secure=0 \
-#        ro.allow.mock.location=1 \
-#        ro.debuggable=1
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -159,7 +175,10 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
         ro.debuggable=1 \
         persist.sys.usb.config=mtp
 
-# android core stuff
-$(call inherit-product, frameworks/native/build/tablet-dalvik-heap.mk)
-$(call inherit-product, build/target/product/full_base.mk)
+PRODUCT_TAGS += dalvik.gc.type-precise
 
+PRODUCT_CHARACTERISTICS := tablet
+$(call inherit-product, frameworks/native/build/tablet-dalvik-heap.mk)
+
+# Use the non-open-source parts, if they're present
+$(call inherit-product-if-exists, vendor/rockchip/rk29board/rk29board-vendor.mk)
